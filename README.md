@@ -24,7 +24,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
     // Use the socket service
     app.UseSocketService();
 }
-```
+```c#
 Then use the service in your services / controllers
 ```
 // MyService.cs
@@ -38,4 +38,4 @@ public async void newUserConnected(object sender, OpenEvent e)
 {
     await e.socket.SendAsync("hello new user!");
 }
-```
+```c#
