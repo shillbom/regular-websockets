@@ -7,7 +7,8 @@ use nuget: [https://www.nuget.org/packages/RegularWebsockets/1.0.0](https://www.
 # Typical usage
 
 The pattern used is configuring the service and then using the service in your controllers / services
-```
+
+```cs
 // Startup.cs
 public void ConfigureServices(IServiceCollection services)
 {
@@ -24,9 +25,10 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
     // Use the socket service
     app.UseSocketService();
 }
-```c#
-Then use the service in your services / controllers
 ```
+Then use the service in your services / controllers
+
+```cs
 // MyService.cs
 public MyService(ISocketService socketService)
 {
@@ -38,4 +40,4 @@ public async void newUserConnected(object sender, OpenEvent e)
 {
     await e.socket.SendAsync("hello new user!");
 }
-```c#
+```
