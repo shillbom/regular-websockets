@@ -6,7 +6,9 @@ use nuget: [https://www.nuget.org/packages/RegularWebsockets/1.0.0](https://www.
 
 # Typical usage
 
-The pattern used is configuring the service and then using the service in your controllers / services
+Have a look at the included sample!
+
+The pattern used is configuring the service and then using the service in your controllers / services.
 
 ```cs
 // Startup.cs
@@ -16,6 +18,10 @@ public void ConfigureServices(IServiceCollection services)
     
     // Configure WebSockets, this makes sure that the service is injected when needed
     services.ConfigureWebSockets();
+    
+    // Configure some class that will handle the connections
+    services.AddSingleTion(typeof(MyHandler))
+    
 }
 
 public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -23,21 +29,21 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
     // ... configure your app
   
     // Use the socket service
-    app.UseSocketService();
+    app.UseRegularWebsockets();
 }
 ```
 Then use the service in your services / controllers
 
 ```cs
-// MyService.cs
-public MyService(ISocketService socketService)
+// MyHandler.cs
+[RegularWebsockets("/greet")]
+public class MyHandler : ISocketService
 {
-    this.socketService = socketService;
-    this.socketService.onOpen += newUserConnected;
-}
-
-public async void newUserConnected(object sender, OpenEvent e)
-{
-    await e.socket.SendAsync("hello new user!");
+  public void OnOpen(OpenEvent ev)
+  {
+      ev.Socket.SendAsync("hello!");
+  }
+  
+  // ...
 }
 ```
