@@ -20,7 +20,7 @@ public void ConfigureServices(IServiceCollection services)
     services.ConfigureWebSockets();
     
     // Configure some class that will handle the connections
-    services.AddSingleTion(typeof(MyHandler))
+    services.AddSingleton(typeof(MyHandler))
     
 }
 
