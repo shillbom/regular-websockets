@@ -1,9 +1,6 @@
 ﻿using RegularWebsockets.Attributes;
 using RegularWebsockets.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using RegularWebsockets.Events;
 
 namespace Sample.Service

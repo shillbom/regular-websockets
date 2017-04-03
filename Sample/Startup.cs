@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,8 +29,8 @@ namespace Sample
             services.AddMvc();
             services.ConfigureWebSockets();
 
-            services.AddSingleton(typeof(Echo));
-            services.AddSingleton(typeof(Greet));
+            // GreeterService is registered as a singleton to keep the state
+            services.AddSingleton<GreeterService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

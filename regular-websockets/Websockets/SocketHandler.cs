@@ -41,7 +41,7 @@ namespace RegularWebsockets.Websockets
             {
                 if (http.WebSockets.IsWebSocketRequest)
                 {
-                    var handler = FindHandler(http);
+                    var handler = LocateHandler(http);
                     var instance = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetServiceOrCreateInstance(app.ApplicationServices, handler) as ISocketService;
 
                     var webSocket = await http.WebSockets.AcceptWebSocketAsync();
@@ -93,7 +93,7 @@ namespace RegularWebsockets.Websockets
             });
         }
 
-        private static Type FindHandler(HttpContext http)
+        private static Type LocateHandler(HttpContext http)
         {
             return RegisteredHandlers.First(h => http.Request.Path.StartsWithSegments(h.Key)).Value;
         }

@@ -1,11 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RegularWebsockets.Attributes;
 using RegularWebsockets.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace RegularWebsockets.Websockets
 {
@@ -27,10 +24,8 @@ namespace RegularWebsockets.Websockets
                 {
                     var pathAttribute = d.GetTypeInfo().GetCustomAttributes<RegularWebsocketsAttribute>();
                     var path = pathAttribute.FirstOrDefault().path;
-                    if (!string.IsNullOrEmpty(path))
-                    {
-                        SocketHandler.RegisterHandler(path, d);
-                    }
+  
+                    SocketHandler.RegisterHandler(path, d);
                 });
         }
     }
