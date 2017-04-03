@@ -2,7 +2,7 @@
 Service and app extensions for creating a websocket service
 
 # Install
-use nuget: [https://www.nuget.org/packages/RegularWebsockets/1.0.0](https://www.nuget.org/packages/RegularWebsockets/1.0.0)
+use nuget: [https://www.nuget.org/packages/RegularWebsockets](https://www.nuget.org/packages/RegularWebsockets)
 
 # Typical usage
 
