@@ -7,7 +7,7 @@ namespace RegularWebsockets.Interfaces
 {
     public interface ISocketService
     {
-        EventHandler<OpenEvent> OnOpen { get; }
-        EventHandler<CloseEvent> OnClose { get; }
+        void OnOpen(OpenEvent ev);
+        void OnClose(CloseEvent ev);
     }
 }

@@ -11,6 +11,6 @@ namespace RegularWebsockets.Interfaces
     {
         Task SendAsync(string text);
         Task CloseAsync(WebSocketCloseStatus status, string message);
-        EventHandler<RecieveEvent> OnMessage { get; }
+        EventHandler<RecieveEvent> OnMessage { get; set; }
     }
 }
