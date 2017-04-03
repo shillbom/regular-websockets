@@ -18,6 +18,8 @@ namespace RegularWebsockets.Websockets
         public EventHandler<RecieveEvent> OnMessage { get; set; }
         public EventHandler<CloseEvent> OnClose { get; set; }
 
+        public WebSocketState Status => _socket.State;
+
         public async Task SendAsync(string message)
         {
             if (_socket.State != WebSocketState.Open)
