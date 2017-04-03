@@ -1,8 +1,0 @@
-version: '2'
-
-services:
-  example:
-    image: example
-    build:
-      context: ./Example
-      dockerfile: Dockerfile
