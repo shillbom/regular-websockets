@@ -13,35 +13,23 @@ namespace RegularWebsockets.Websockets
     {
         private WebSocket _socket;
 
-        public RegularWebSocket(WebSocket socket) 
-        {
-            _socket = socket;
-        }
+        public RegularWebSocket(WebSocket socket) => _socket = socket;
 
         public EventHandler<RecieveEvent> OnMessage { get; set; }
-
-        public async Task CloseAsync(WebSocketCloseStatus status = WebSocketCloseStatus.Empty, string message = "")
-        {
-            await _socket.CloseAsync(status, message, CancellationToken.None);
-        }
+        public EventHandler<CloseEvent> OnClose { get; set; }
 
         public async Task SendAsync(string message)
         {
             if (_socket.State != WebSocketState.Open)
                 return;
 
-            var serializedMessage = JsonConvert.SerializeObject(message);
-            await _socket.SendAsync(new ArraySegment<byte>(Encoding.ASCII.GetBytes(serializedMessage)), WebSocketMessageType.Text, true, CancellationToken.None);
+            await _socket.SendAsync(new ArraySegment<byte>(Encoding.ASCII.GetBytes(message)), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
-        public void NotifyRecieved(RecieveEvent evt)
-        {
-            OnMessage(this, evt);
-        }
+        public void NotifyRecieved(RecieveEvent evt) => OnMessage(this, evt);
+        public void NotifyClosed(CloseEvent evt) => OnClose(this, evt);
 
-        public Task CloseAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task CloseAsync() => await CloseAsync(WebSocketCloseStatus.Empty, "");
+        public async Task CloseAsync(WebSocketCloseStatus status, string message) => await _socket.CloseAsync(status, message, CancellationToken.None);
     }
 }

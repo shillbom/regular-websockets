@@ -14,8 +14,6 @@ namespace RegularWebsockets.Websockets
 {
     public static class SocketHandler
     {
-        public static EventHandler<OpenEvent> OnOpen { get; set; }
-        public static EventHandler<CloseEvent> OnClose { get; set; }
         private static Dictionary<PathString, Type> RegisteredHandlers = new Dictionary<PathString, Type>();
 
         public static void UseRegularWebsockets(this IApplicationBuilder app, WebSocketOptions options)
@@ -32,7 +30,8 @@ namespace RegularWebsockets.Websockets
 
         public static void RegisterHandler(string path, Type handler)
         {
-            RegisteredHandlers.Add(new PathString(path.ToLower()), handler);
+            if (!RegisteredHandlers.ContainsKey(path))
+                RegisteredHandlers.Add(new PathString(path.ToLower()), handler);
         }
 
         private static void SetupListeners(IApplicationBuilder app)
@@ -53,7 +52,6 @@ namespace RegularWebsockets.Websockets
                         Request = http.Request
                     });
 
-                    var token = CancellationToken.None;
                     var recieveBuffer = new ArraySegment<Byte>(new Byte[4096]);
                     while (webSocket.State == WebSocketState.Open)
                     {
@@ -80,11 +78,14 @@ namespace RegularWebsockets.Websockets
                         }
                     }
 
-                    instance.OnClose(new CloseEvent
+                    var closed = new CloseEvent
                     {
                         Socket = extendedSocket,
                         Reason = webSocket.CloseStatus ?? WebSocketCloseStatus.Empty
-                    });
+                    };
+
+                    extendedSocket.NotifyClosed(closed);
+                    instance.OnClose(closed);
                 }
                 else
                 {

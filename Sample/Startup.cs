@@ -27,7 +27,7 @@ namespace Sample
         {
             // Add framework services.
             services.AddMvc();
-            services.ConfigureWebSockets();
+            services.AddRegularWebSockets();
 
             // GreeterService is registered as a singleton to keep the state
             services.AddSingleton<GreeterService>();

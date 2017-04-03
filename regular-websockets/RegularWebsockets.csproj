@@ -1,8 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
-    <Version>1.0.1</Version>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <Version>1.0.4</Version>
+    <Description>WebSockets made regular and simple</Description>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
