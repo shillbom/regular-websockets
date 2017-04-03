@@ -31,5 +31,6 @@ namespace RegularWebsockets.Websockets
 
         public async Task CloseAsync() => await CloseAsync(WebSocketCloseStatus.Empty, "");
         public async Task CloseAsync(WebSocketCloseStatus status, string message) => await _socket.CloseAsync(status, message, CancellationToken.None);
+        public void Dispose() => this._socket.Dispose();
     }
 }

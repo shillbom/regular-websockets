@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RegularWebsockets.Interfaces
 {
-    public interface IWebSocket
+    public interface IWebSocket: IDisposable
     {
         Task SendAsync(string text);
         Task CloseAsync();
