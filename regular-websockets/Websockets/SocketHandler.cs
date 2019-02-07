@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using RegularWebsockets.Events;
 using RegularWebsockets.Interfaces;
 using System;
@@ -43,7 +44,10 @@ namespace RegularWebsockets.Websockets
                 if (http.WebSockets.IsWebSocketRequest)
                 {
                     var handler = LocateHandler(http);
-                    var instance = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetServiceOrCreateInstance(app.ApplicationServices, handler) as ISocketService;
+                    var instance = ActivatorUtilities.GetServiceOrCreateInstance(http.RequestServices, handler) as ISocketService;
+                    if (instance == null) {
+                        instance = ActivatorUtilities.GetServiceOrCreateInstance(app.ApplicationServices, handler) as ISocketService;
+                    }
 
                     var webSocket = await http.WebSockets.AcceptWebSocketAsync();
                     var extendedSocket = new RegularWebSocket(webSocket);

@@ -30,7 +30,7 @@ namespace Sample
             services.AddRegularWebSockets();
 
             // GreeterService is registered as a singleton to keep the state
-            services.AddSingleton<GreeterService>();
+            services.AddScoped<GreeterService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
