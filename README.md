@@ -10,7 +10,7 @@ use nuget: [https://www.nuget.org/packages/RegularWebsockets](https://www.nuget.
 
 Have a look at the included sample!
 
-The pattern used is configuring the service and then using the service in your controllers / services.
+The pattern used is similar to MVC. Register the service and then create "controllers" that implement the `ISocketService`, Configure and endpoint using `RegularWebsockets` instead of `Route` on the service and of you go!
 
 ```cs
 // Startup.cs
