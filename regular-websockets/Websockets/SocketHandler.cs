@@ -15,16 +15,18 @@ namespace RegularWebsockets.Websockets
     public static class SocketHandler
     {
         private static Dictionary<PathString, Type> RegisteredHandlers = new Dictionary<PathString, Type>();
-
-        public static void UseRegularWebsockets(this IApplicationBuilder app, WebSocketOptions options)
-        {
-            app.UseWebSockets(options);
-            SetupListeners(app);
-        }
+        private const int bufSize = 1024 * 4;
 
         public static void UseRegularWebsockets(this IApplicationBuilder app)
         {
-            app.UseWebSockets();
+            var defaults =
+
+            app.UseWebSockets(new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
+                ReceiveBufferSize = bufSize
+            });
+
             SetupListeners(app);
         }
 
@@ -52,12 +54,13 @@ namespace RegularWebsockets.Websockets
                         Request = http.Request
                     });
 
-                    var recieveBuffer = new ArraySegment<Byte>(new Byte[4096]);
+                    var recieveBuffer = new ArraySegment<Byte>(new Byte[bufSize]);
+                    WebSocketReceiveResult result = null;
+
                     while (webSocket.State == WebSocketState.Open)
                     {
                         using (var buffer = new MemoryStream())
                         {
-                            WebSocketReceiveResult result = null;
                             do
                             {
                                 result = await webSocket.ReceiveAsync(recieveBuffer, CancellationToken.None);
@@ -77,6 +80,8 @@ namespace RegularWebsockets.Websockets
                             }
                         }
                     }
+
+                    await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
 
                     var closed = new CloseEvent
                     {

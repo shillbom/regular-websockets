@@ -14,7 +14,6 @@ namespace RegularWebsockets.Websockets
         private WebSocket _socket;
 
         public RegularWebSocket(WebSocket socket) => _socket = socket;
-
         public EventHandler<RecieveEvent> OnMessage { get; set; }
         public EventHandler<CloseEvent> OnClose { get; set; }
 

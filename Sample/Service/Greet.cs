@@ -25,7 +25,7 @@ namespace Sample.Service
 
         private void OnLeave(object sender, CloseEvent e)
         {
-            Console.Write("goodbye...");
+            Console.WriteLine("goodbye...");
         }
 
         public void OnClose(CloseEvent ev)
@@ -37,6 +37,6 @@ namespace Sample.Service
         {
             await this.greetingService.SendToAll($"say hi to {e.Message}");
         }
-       
+
     }
 }

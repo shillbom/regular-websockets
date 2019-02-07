@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Sample/Sample.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build",
+            "command": "nuget",
+            "type": "process",
+            "args": [
+                "pack",
+                "${workspaceFolder}/regular-websockets/RegularWebsockets.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+    ]
+}
