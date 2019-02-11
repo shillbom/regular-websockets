@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <RepositoryUrl>https://github.com/killbom/regular-websockets.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
