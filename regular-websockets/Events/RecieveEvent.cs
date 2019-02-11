@@ -5,6 +5,7 @@ namespace RegularWebsockets.Events
     public class RecieveEvent
     {
         public WebSocketMessageType MessageType { get; set; }
-        public string Message;
+        public WebSocket socket { get; set; }
+        public string Message { get; set; }
     }
 }

@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using RegularWebsockets.Interfaces;
+﻿using System.Net.WebSockets;
+using Microsoft.AspNetCore.Http;
 
 namespace RegularWebsockets.Events
 {
     public class OpenEvent
     {
-        public IWebSocket Socket { get; set; }
+        public WebSocket Socket { get; set; }
         public HttpRequest Request { get; set; }
     }
 }

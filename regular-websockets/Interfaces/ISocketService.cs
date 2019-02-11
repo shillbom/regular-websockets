@@ -1,4 +1,5 @@
-﻿using RegularWebsockets.Events;
+﻿using System;
+using RegularWebsockets.Events;
 
 namespace RegularWebsockets.Interfaces
 {
@@ -6,5 +7,6 @@ namespace RegularWebsockets.Interfaces
     {
         void OnOpen(OpenEvent ev);
         void OnClose(CloseEvent ev);
+        void OnMessage(RecieveEvent ev);
     }
 }

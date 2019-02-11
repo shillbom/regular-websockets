@@ -8,18 +8,25 @@ namespace Sample.Service
     [RegularWebsockets("/echo")]
     public class Echo : ISocketService
     {
-        public void OnOpen(OpenEvent ev)
+        public void Dispose()
         {
-            ev.Socket.OnMessage += OnMessage;
-        }
-        public void OnClose(CloseEvent ev)
-        {
-            throw new NotImplementedException();
         }
 
-        private void OnMessage(object sender, RecieveEvent e)
+        public void OnClose(CloseEvent ev)
         {
-            (sender as IWebSocket).SendAsync(e.Message);
-        }        
+        }
+
+        public void OnOpen(OpenEvent ev)
+        {
+        }
+
+        private async void OnMessage(RecieveEvent ev)
+        {
+            await ev.socket.SendAsync(ev.Message);
+        }
+
+        void ISocketService.OnMessage(RecieveEvent ev)
+        {
+        }
     }
 }

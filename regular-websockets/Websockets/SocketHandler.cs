@@ -43,18 +43,10 @@ namespace RegularWebsockets.Websockets
             {
                 if (http.WebSockets.IsWebSocketRequest)
                 {
-                    var handler = LocateHandler(http);
-                    var instance = ActivatorUtilities.GetServiceOrCreateInstance(http.RequestServices, handler) as ISocketService;
-                    if (instance == null) {
-                        instance = ActivatorUtilities.GetServiceOrCreateInstance(app.ApplicationServices, handler) as ISocketService;
-                    }
-
                     var webSocket = await http.WebSockets.AcceptWebSocketAsync();
-                    var extendedSocket = new RegularWebSocket(webSocket);
-
-                    instance.OnOpen(new OpenEvent
+                    GetInstance(http, app).OnOpen(new OpenEvent
                     {
-                        Socket = extendedSocket,
+                        Socket = webSocket,
                         Request = http.Request
                     });
 
@@ -76,31 +68,38 @@ namespace RegularWebsockets.Websockets
                             using (var reader = new StreamReader(buffer, Encoding.UTF8))
                             {
                                 var recievedMessage = await reader.ReadToEndAsync();
-                                extendedSocket.NotifyRecieved(new RecieveEvent
+                                GetInstance(http, app).OnMessage(new RecieveEvent
                                 {
                                     Message = recievedMessage,
-                                    MessageType = result.MessageType
+                                    MessageType = result.MessageType,
+                                    socket = webSocket
                                 });
                             }
                         }
                     }
 
                     await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-
-                    var closed = new CloseEvent
+                    GetInstance(http, app).OnClose(new CloseEvent
                     {
-                        Socket = extendedSocket,
+                        Socket = webSocket,
                         Reason = webSocket.CloseStatus ?? WebSocketCloseStatus.Empty
-                    };
-
-                    extendedSocket.NotifyClosed(closed);
-                    instance.OnClose(closed);
+                    });
                 }
                 else
                 {
                     await next();
                 }
             });
+        }
+
+        private static ISocketService GetInstance(HttpContext http, IApplicationBuilder app) {
+            var handler = LocateHandler(http);
+            var instance = ActivatorUtilities.GetServiceOrCreateInstance(http.RequestServices, handler) as ISocketService;
+            if (instance == null) {
+                instance = ActivatorUtilities.GetServiceOrCreateInstance(app.ApplicationServices, handler) as ISocketService;
+            }
+
+            return instance;
         }
 
         private static Type LocateHandler(HttpContext http)

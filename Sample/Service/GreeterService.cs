@@ -1,18 +1,20 @@
 ﻿using RegularWebsockets.Interfaces;
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using System.Threading.Tasks;
+using RegularWebsockets.Events;
 
 namespace Sample.Service
 {
     public class GreeterService
     {
-        private IList<IWebSocket> clients;
+        private IList<WebSocket> clients;
         public GreeterService()
         {
-            this.clients = new List<IWebSocket>();
+            this.clients = new List<WebSocket>();
         }
 
-        public void RegisterClient(IWebSocket client)
+        public void RegisterClient(WebSocket client)
         {
             lock (clients)
             {
@@ -21,7 +23,7 @@ namespace Sample.Service
             }
         }
 
-        public void UnRegisterClient(IWebSocket client)
+        public void UnRegisterClient(WebSocket client)
         {
             lock (clients)
             {

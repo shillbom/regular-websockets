@@ -17,9 +17,6 @@ namespace Sample.Service
 
         public void OnOpen(OpenEvent ev)
         {
-            ev.Socket.OnMessage += OnMessage;
-            ev.Socket.OnClose += OnLeave;
-
             this.greetingService.RegisterClient(ev.Socket);
         }
 
@@ -33,10 +30,13 @@ namespace Sample.Service
             this.greetingService.UnRegisterClient(ev.Socket);
         }
 
-        private async void OnMessage(object sender, RecieveEvent e)
+        public async void OnMessage(RecieveEvent e)
         {
             await this.greetingService.SendToAll($"say hi to {e.Message}");
         }
 
+        public void Dispose()
+        {
+        }
     }
 }
