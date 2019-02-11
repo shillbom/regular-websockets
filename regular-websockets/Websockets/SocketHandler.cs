@@ -43,8 +43,9 @@ namespace RegularWebsockets.Websockets
             {
                 if (http.WebSockets.IsWebSocketRequest)
                 {
+                    var handler = LocateHandler(http);
                     var webSocket = await http.WebSockets.AcceptWebSocketAsync();
-                    GetInstance(http, app).OnOpen(new OpenEvent
+                    GetInstance(handler, http, app).OnOpen(new OpenEvent
                     {
                         Socket = webSocket,
                         Request = http.Request
@@ -68,7 +69,7 @@ namespace RegularWebsockets.Websockets
                             using (var reader = new StreamReader(buffer, Encoding.UTF8))
                             {
                                 var recievedMessage = await reader.ReadToEndAsync();
-                                GetInstance(http, app).OnMessage(new RecieveEvent
+                                GetInstance(handler, http, app).OnMessage(new RecieveEvent
                                 {
                                     Message = recievedMessage,
                                     MessageType = result.MessageType,
@@ -79,7 +80,7 @@ namespace RegularWebsockets.Websockets
                     }
 
                     await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-                    GetInstance(http, app).OnClose(new CloseEvent
+                    GetInstance(handler, http, app).OnClose(new CloseEvent
                     {
                         Socket = webSocket,
                         Reason = webSocket.CloseStatus ?? WebSocketCloseStatus.Empty
@@ -92,11 +93,10 @@ namespace RegularWebsockets.Websockets
             });
         }
 
-        private static ISocketService GetInstance(HttpContext http, IApplicationBuilder app) {
-            var handler = LocateHandler(http);
-            var instance = ActivatorUtilities.GetServiceOrCreateInstance(http.RequestServices, handler) as ISocketService;
+        private static ISocketService GetInstance(Type t, HttpContext http, IApplicationBuilder app) {
+            var instance = ActivatorUtilities.GetServiceOrCreateInstance(http.RequestServices, t) as ISocketService;
             if (instance == null) {
-                instance = ActivatorUtilities.GetServiceOrCreateInstance(app.ApplicationServices, handler) as ISocketService;
+                instance = ActivatorUtilities.GetServiceOrCreateInstance(app.ApplicationServices, t) as ISocketService;
             }
 
             return instance;
