@@ -12,8 +12,8 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "build",
-            "command": "nuget",
+            "label": "publish",
+            "command": "dotnet",
             "type": "process",
             "args": [
                 "pack",
