@@ -20,13 +20,9 @@ namespace Sample.Service
         {
         }
 
-        private async void OnMessage(RecieveEvent ev)
+        public async void OnMessage(RecieveEvent ev)
         {
             await ev.socket.SendAsync(ev.Message);
-        }
-
-        void ISocketService.OnMessage(RecieveEvent ev)
-        {
         }
     }
 }

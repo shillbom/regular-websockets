@@ -8,18 +8,13 @@ namespace Sample.Service
 {
     public class GreeterService
     {
-        private IList<WebSocket> clients;
-        public GreeterService()
-        {
-            this.clients = new List<WebSocket>();
-        }
+        private static IList<WebSocket> clients = new List<WebSocket>();
 
         public void RegisterClient(WebSocket client)
         {
             lock (clients)
             {
-                this.clients.Add(client);
-
+                clients.Add(client);
             }
         }
 
@@ -27,7 +22,7 @@ namespace Sample.Service
         {
             lock (clients)
             {
-                this.clients.Remove(client);
+                clients.Remove(client);
             }
         }
 

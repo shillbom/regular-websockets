@@ -15,9 +15,10 @@ namespace Sample.Service
             this.greetingService = greetingService;
         }
 
-        public void OnOpen(OpenEvent ev)
+        public async void OnOpen(OpenEvent ev)
         {
             this.greetingService.RegisterClient(ev.Socket);
+            await ev.Socket.SendAsync("Welcome! Everything you say will be seen by everyone");
         }
 
         private void OnLeave(object sender, CloseEvent e)
@@ -32,7 +33,7 @@ namespace Sample.Service
 
         public async void OnMessage(RecieveEvent e)
         {
-            await this.greetingService.SendToAll($"say hi to {e.Message}");
+            await this.greetingService.SendToAll($"someone says {e.Message}");
         }
 
         public void Dispose()
