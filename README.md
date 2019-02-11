@@ -50,7 +50,7 @@ public class MyHandler : ISocketService
       ev.Socket.SendAsync("hello!");
   }
 
-  public void OnOpen(RecieveEvent ev)
+  public void OnMessage(RecieveEvent ev)
   {
       // The client says something
       Console.WrinteLine(ev.Message);
