@@ -73,7 +73,7 @@ namespace RegularWebsockets.Websockets
                                 {
                                     Message = recievedMessage,
                                     MessageType = result.MessageType,
-                                    socket = webSocket
+                                    Socket = webSocket
                                 });
                             }
                         }

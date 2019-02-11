@@ -22,7 +22,7 @@ namespace Sample.Service
 
         public async void OnMessage(RecieveEvent ev)
         {
-            await ev.socket.SendAsync(ev.Message);
+            await ev.Socket.SendAsync(ev.Message);
         }
     }
 }
