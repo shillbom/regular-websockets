@@ -1,4 +1,4 @@
-# regular-websocktes
+# regular-websockets
 Service and app extensions for creating a websocket service. Should make it easier to scope endpoints and it handles reading the bytes and creating strings for you.
 
 Send JSON objects as strings and cast them in your handlers to make it easy. Feel free to create an issue if there is something that i should add!
