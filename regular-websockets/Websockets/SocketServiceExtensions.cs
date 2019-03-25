@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace RegularWebsockets.Websockets
 {
-    public static class ISocketServiceExtensions
+    public static class SocketServiceExtensions
     {
         public static void AddRegularWebSockets(this IServiceCollection services)
         {

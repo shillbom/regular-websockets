@@ -54,37 +54,45 @@ namespace RegularWebsockets.Websockets
                     var recieveBuffer = new ArraySegment<Byte>(new Byte[bufSize]);
                     WebSocketReceiveResult result = null;
 
-                    while (webSocket.State == WebSocketState.Open)
-                    {
-                        using (var buffer = new MemoryStream())
+                    try {
+                        while (webSocket.State == WebSocketState.Open)
                         {
-                            do
+                            using (var buffer = new MemoryStream())
                             {
-                                result = await webSocket.ReceiveAsync(recieveBuffer, CancellationToken.None);
-                                buffer.Write(recieveBuffer.Array, recieveBuffer.Offset, result.Count);
-                            }
-                            while (!result.EndOfMessage);
-
-                            buffer.Position = 0;
-                            using (var reader = new StreamReader(buffer, Encoding.UTF8))
-                            {
-                                var recievedMessage = await reader.ReadToEndAsync();
-                                GetInstance(handler, http, app).OnMessage(new RecieveEvent
+                                do
                                 {
-                                    Message = recievedMessage,
-                                    MessageType = result.MessageType,
-                                    Socket = webSocket
-                                });
+                                    result = await webSocket.ReceiveAsync(recieveBuffer, CancellationToken.None);
+                                    buffer.Write(recieveBuffer.Array, recieveBuffer.Offset, result.Count);
+                                }
+                                while (!result.EndOfMessage);
+
+                                buffer.Position = 0;
+                                using (var reader = new StreamReader(buffer, Encoding.UTF8))
+                                {
+                                    var recievedMessage = await reader.ReadToEndAsync();
+                                    GetInstance(handler, http, app).OnMessage(new RecieveEvent
+                                    {
+                                        Message = recievedMessage,
+                                        MessageType = result.MessageType,
+                                        Socket = webSocket
+                                    });
+                                }
                             }
                         }
-                    }
 
-                    await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-                    GetInstance(handler, http, app).OnClose(new CloseEvent
-                    {
-                        Socket = webSocket,
-                        Reason = webSocket.CloseStatus ?? WebSocketCloseStatus.Empty
-                    });
+                        await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+                        GetInstance(handler, http, app).OnClose(new CloseEvent
+                        {
+                            Socket = webSocket,
+                            Reason = webSocket.CloseStatus ?? WebSocketCloseStatus.Empty
+                        });
+                    } catch (Exception) {
+                        GetInstance(handler, http, app).OnClose(new CloseEvent
+                        {
+                            Socket = webSocket,
+                            Reason = WebSocketCloseStatus.Empty
+                        });
+                    }
                 }
                 else
                 {
